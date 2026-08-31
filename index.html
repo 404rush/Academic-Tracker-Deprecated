@@ -25,7 +25,7 @@
     --border2:  #c4b8a8;
     --text:     #1a1410;
     --muted:    #6b5f52;
-    --faint:    #a09080;
+    --faint:    #706459;
 
     /* Unscored teaching week */
     --blank:        #e8e0d4;
@@ -56,7 +56,7 @@
     --border2:  #4c4133;
     --text:     #f3ede2;
     --muted:    #ad9f8c;
-    --faint:    #766a5a;
+    --faint:    #9c9388;
 
     --blank:        #2a2419;
     --blank-border: #3d3527;
@@ -126,6 +126,11 @@
     text-transform: uppercase; margin-bottom: 14px;
   }
   .header p { font-size: 0.67rem; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; line-height: 2.2; }
+  .privacy-note {
+    margin-top: 14px; font-size: 0.62rem; color: var(--muted);
+    letter-spacing: 0.02em; line-height: 1.6; max-width: 480px;
+    margin-left: auto; margin-right: auto;
+  }
 
   /* ── Start date card ── */
   .start-card {
@@ -584,7 +589,7 @@
 
   /* Scored greens — 5 levels, light to very dark */
   .week.p1 { background: var(--g1); border-color: var(--g1b); color: var(--text); }
-  .week.p2 { background: var(--g2); border-color: var(--g2b); color:#fff; }
+  .week.p2 { background: var(--g2); border-color: var(--g2b); color: var(--text); }
   .week.p3 { background: var(--g3); border-color: var(--g3b); color:#fff; }
   .week.p4 { background: var(--g4); border-color: var(--g4b); color:#fff; }
   .week.p5 { background: var(--g5); border-color: var(--g5b); color:#fff; }
@@ -680,7 +685,7 @@
   .score-btn.active { border-color: var(--text) !important; box-shadow: 0 0 0 2px rgba(26,20,16,0.2); }
 
   .score-btn[data-s="1"] { background: var(--g1); border-color: var(--g1b); color: var(--text); }
-  .score-btn[data-s="2"] { background: var(--g2); border-color: var(--g2b); color: #fff; }
+  .score-btn[data-s="2"] { background: var(--g2); border-color: var(--g2b); color: var(--text); }
   .score-btn[data-s="3"] { background: var(--g3); border-color: var(--g3b); color: #fff; }
   .score-btn[data-s="4"] { background: var(--g4); border-color: var(--g4b); color: #fff; }
   .score-btn[data-s="5"] { background: var(--g5); border-color: var(--g5b); color: #fff; }
@@ -784,9 +789,10 @@
   <div class="header-subtitle">for UG &amp; PG students</div>
   <p>
     Enter the first day of your program.<br>
-    Score each past week honestly, at the end of it.<br>
+    Score each week honestly, once it's over.<br>
     No one is watching. The record is yours alone.
   </p>
+  <div class="privacy-note">🔒 Nothing here is uploaded anywhere — everything you enter stays in this browser, on this device.</div>
 </div>
 
 <!-- Start date -->
@@ -1415,8 +1421,10 @@ function applyTheme(theme) {
 }
 (function initTheme() {
   const saved = localStorage.getItem(KEY_THEME);
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+  // Always defaults to light on a first visit — deliberately ignores the OS/browser's
+  // prefers-color-scheme, so the app opens the same way for everyone until they choose
+  // otherwise via the toggle. That choice is then remembered (applyTheme saves it).
+  applyTheme(saved === 'dark' ? 'dark' : 'light');
 })();
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme');
